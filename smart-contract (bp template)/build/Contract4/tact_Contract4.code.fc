@@ -1,0 +1,185 @@
+#pragma version =0.4.4;
+#pragma allow-post-modification;
+#pragma compute-asm-ltr;
+
+#include "tact_Contract4.headers.fc";
+#include "tact_Contract4.stdlib.fc";
+#include "tact_Contract4.constants.fc";
+#include "tact_Contract4.storage.fc";
+
+;;
+;; Contract Contract4 functions
+;;
+
+(slice, int) $Contract4$_contract_init() impure inline_ref {
+    var (($self'deployer, $self'val)) = (null(), null());
+    $self'deployer = __tact_context_get_sender();
+    $self'val = 0;
+    return ($self'deployer, $self'val);
+}
+
+((slice, int), int) $Contract4$_fun_balance((slice, int) $self) impure inline_ref {
+    var (($self'deployer, $self'val)) = $self;
+    return (($self'deployer, $self'val), __tact_my_balance());
+}
+
+((slice, int), int) $Contract4$_fun_val((slice, int) $self) impure inline_ref {
+    var (($self'deployer, $self'val)) = $self;
+    return (($self'deployer, $self'val), $self'val);
+}
+
+;;
+;; Receivers of a Contract Contract4
+;;
+
+(((slice, int)), ()) %$Contract4$_internal_empty((slice, int) $self) impure inline {
+    var ($self'deployer, $self'val) = $self;
+    __tact_debug_str(__gen_slice_string_d4ac4197f9a7d50c59c39ad8548801590f72ffb996b0259d0db3f081129496b6(), "[DEBUG] File contracts/contract4.tact:20:9");
+    return (($self'deployer, $self'val), ());
+}
+
+((slice, int), ()) $Contract4$_internal_text_c4f8d72312edfdef5b7bec7833bdbb162d1511bd78a912aed0f2637af65572ae((slice, int) $self) impure inline {
+    var ($self'deployer, $self'val) = $self;
+    __tact_debug_str(__tact_int_to_string($Context$_get_value(__tact_context_get())), "[DEBUG] File contracts/contract4.tact:24:9");
+    $self'val = ($self'val + 1);
+    return (($self'deployer, $self'val), ());
+}
+
+((slice, int), ()) $Contract4$_internal_text_6a887980ac293e089c35d5c793725f1d039c7b192483ed2b77c62bf18798958f((slice, int) $self) impure inline {
+    var ($self'deployer, $self'val) = $self;
+    __tact_debug_str(__tact_int_to_string($Context$_get_value(__tact_context_get())), "[DEBUG] File contracts/contract4.tact:29:9");
+    $self'val = ($self'val + 1);
+    ($self'deployer, $self'val)~$Contract4$_fun_reply(__gen_cell_comment_7e196d99e1c915d9d659f2fe0802abc2a7fe38f8eb427644ac86838264432458());
+    return (($self'deployer, $self'val), ());
+}
+
+(((slice, int)), ()) $Contract4$_internal_binary_Withdraw((slice, int) $self, (int) $msg) impure inline {
+    var ($self'deployer, $self'val) = $self;
+    var ($msg'amount) = $msg;
+    throw_unless(36437, ( __tact_slice_eq_bits($self'deployer, __tact_context_get_sender()) ));
+    int $amount = min($msg'amount, ((__tact_my_balance() - $Context$_get_value(__tact_context_get())) - 10000000));
+    throw_unless(19364, ($amount > 0));
+    $global_send($SendParameters$_constructor_to_bounce_value_mode(__gen_slice_address_542d04d494d125686e23ac77245da7ec89d102f702ffd85f56f8d7e4482a6d3b(), true, $amount, 66));
+    return (($self'deployer, $self'val), ());
+}
+
+(((slice, int)), ()) $Contract4$_internal_binary_Deploy((slice, int) $self, (int) $deploy) impure inline {
+    var ($self'deployer, $self'val) = $self;
+    var ($deploy'queryId) = $deploy;
+    ($self'deployer, $self'val)~$Contract4$_fun_notify($DeployOk$_store_cell($DeployOk$_constructor_queryId($deploy'queryId)));
+    return (($self'deployer, $self'val), ());
+}
+
+;;
+;; Get methods of a Contract Contract4
+;;
+
+_ %balance() method_id(104128) {
+    var self = $Contract4$_contract_load();
+    var res = self~$Contract4$_fun_balance();
+    return res;
+}
+
+_ %val() method_id(130969) {
+    var self = $Contract4$_contract_load();
+    var res = self~$Contract4$_fun_val();
+    return res;
+}
+
+_ supported_interfaces() method_id {
+    return (
+        "org.ton.introspection.v0"H >> 128,
+        "org.ton.abi.ipfs.v0"H >> 128,
+        "org.ton.deploy.lazy.v0"H >> 128,
+        "org.ton.debug.v0"H >> 128,
+        "org.ton.chain.workchain.v0"H >> 128
+    );
+}
+
+_ get_abi_ipfs() method_id {
+    return "ipfs://QmfY5MFLHNL1NWoC9Tq7njDTopmBRt5HiTibsxe5fjsiSy";
+}
+
+_ lazy_deployment_completed() method_id {
+    return get_data().begin_parse().load_int(1);
+}
+
+;;
+;; Routing of a Contract Contract4
+;;
+
+((slice, int), int) $Contract4$_contract_router_internal((slice, int) self, int msg_bounced, slice in_msg) impure inline_ref {
+    ;; Handle bounced messages
+    if (msg_bounced) {
+        return (self, true);
+    }
+    
+    ;; Parse incoming message
+    int op = 0;
+    if (slice_bits(in_msg) >= 32) {
+        op = in_msg.preload_uint(32);
+    }
+    
+    
+    ;; Receive empty message
+    if ((op == 0) & (slice_bits(in_msg) <= 32)) {
+        self~%$Contract4$_internal_empty();
+        return (self, true);
+    }
+    
+    ;; Receive Withdraw message
+    if (op == 195467089) {
+        var msg = in_msg~$Withdraw$_load();
+        self~$Contract4$_internal_binary_Withdraw(msg);
+        return (self, true);
+    }
+    
+    ;; Receive Deploy message
+    if (op == 2490013878) {
+        var msg = in_msg~$Deploy$_load();
+        self~$Contract4$_internal_binary_Deploy(msg);
+        return (self, true);
+    }
+    
+    ;; Text Receivers
+    if (op == 0) {
+        var text_op = slice_hash(in_msg);
+        
+        ;; Receive "increment" message
+        if (text_op == 0xc4f8d72312edfdef5b7bec7833bdbb162d1511bd78a912aed0f2637af65572ae) {
+            self~$Contract4$_internal_text_c4f8d72312edfdef5b7bec7833bdbb162d1511bd78a912aed0f2637af65572ae();
+            return (self, true);
+        }
+        
+        ;; Receive "refund increment" message
+        if (text_op == 0x6a887980ac293e089c35d5c793725f1d039c7b192483ed2b77c62bf18798958f) {
+            self~$Contract4$_internal_text_6a887980ac293e089c35d5c793725f1d039c7b192483ed2b77c62bf18798958f();
+            return (self, true);
+        }
+    }
+    
+    return (self, false);
+}
+
+() recv_internal(int msg_value, cell in_msg_cell, slice in_msg) impure {
+    
+    ;; Context
+    var cs = in_msg_cell.begin_parse();
+    var msg_flags = cs~load_uint(4);
+    var msg_bounced = -(msg_flags & 1);
+    slice msg_sender_addr = __tact_verify_address(cs~load_msg_addr());
+    __tact_context = (msg_bounced, msg_sender_addr, msg_value, cs);
+    __tact_context_sender = msg_sender_addr;
+    
+    ;; Load contract data
+    var self = $Contract4$_contract_load();
+    
+    ;; Handle operation
+    int handled = self~$Contract4$_contract_router_internal(msg_bounced, in_msg);
+    
+    ;; Throw if not handled
+    throw_unless(130, handled);
+    
+    ;; Persist state
+    $Contract4$_contract_store(self);
+}
