@@ -1,5 +1,4 @@
 // src/bot.ts
-
 import TelegramBot from 'node-telegram-bot-api';
 import * as process from 'process';
 

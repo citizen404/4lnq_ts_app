@@ -28,7 +28,9 @@
         "skipLibCheck": true,
         "skipDefaultLibCheck": true,
         "allowJs": true,
-        "outDir": "./dist"
+        "outDir": "./dist",
+        "baseUrl": "./",
+        "typeRoots": ["./node_modules/@types"],
     },
     "include": ["src"],
     "exclude": [

@@ -11,7 +11,6 @@ import { updateUserWalletAddress } from './main';
 export async function handleConnectCommand(msg: TelegramBot.Message): Promise<void> {
     const chatId = msg.chat.id;
     const wallets = await getWallets();
-
     const connector = getConnector(chatId);
 
     connector.onStatusChange(wallet => {
@@ -46,82 +45,69 @@ export async function handleConnectCommand(msg: TelegramBot.Message): Promise<vo
 export async function handleSendTXCommand(msg: {
     chat: { id: number };
     from: { id: number };
-    text: string;
+    //text: string;
+    type: string;
     cost: string;
     address: string
 }): Promise<void> {
     const chatId = msg.chat.id;
     const trueCost = toNano(msg.cost)
+    const feePercentage = BigInt(2); // get 2%
+    const hundred = BigInt(100);
+    const trueFee = (trueCost * feePercentage) / hundred;
 
     // Log the incoming message
-    console.log('handleSendTXCommand received message:', msg.address, trueCost);
+    console.log('handleSendTXCommand received message:', msg.address, trueCost, trueFee);
 
     const connector = getConnector(chatId);
     await connector.restoreConnection();
+
     if (!connector.connected) {
-        await bot.sendMessage(chatId, 'Connect wallet to send transaction');
-        return;
+        await bot.sendMessage(chatId, 'Connect the wallet to send transaction. Use /connect command');
+        return
     }
-
     try {
-        // Option 1: Send transaction request directly to the wallet application
         const walletInfo = await getWalletInfo(connector.wallet!.device.appName);
-        await bot.sendMessage(chatId, `Open ${walletInfo?.name || connector.wallet!.device.appName} and confirm transaction`)
-
-        await connector.sendTransaction({
-            validUntil: Math.round(Date.now() / 1000) + 600, // timeout is SECONDS
-            messages: [
-                {
-                    amount: trueCost.toString(),
-                    address: msg.address
-                }
-            ]
-        });
-
-        await bot.sendMessage(chatId, `Transaction sent successfully`);
+        const amount = msg.type === 'fee' ? trueFee.toString() : trueCost.toString();
+        // Provide a deep link for the user to confirm the transaction in the wallet application
+        let deeplink = '';
+        if (walletInfo) {
+            if (walletInfo && "universalLink" in walletInfo) { // kostyl
+                deeplink = walletInfo.universalLink;
+            }
+            if (deeplink) {
+                await bot.sendMessage(chatId, `Open ${walletInfo.name || connector.wallet!.device.appName} to confirm TON transaction`, {
+                    reply_markup: {
+                        inline_keyboard: [
+                            [{text: 'Open Wallet', url: deeplink}]
+                        ]
+                    }
+                });
+            }
+            // Send transaction request directly to the wallet application
+            await connector.sendTransaction({
+                validUntil: Math.round(Date.now() / 1000) + 600,
+                messages: [
+                    {amount: amount, address: msg.address}
+                ]
+            });
+        }
+            await bot.sendMessage(chatId, `Transaction completed!`);
     } catch (e) {
         if (e instanceof UserRejectsError) {
             await bot.sendMessage(chatId, `You rejected the transaction`);
         } else {
-            await bot.sendMessage(chatId, `Unknown error happened`);
+            await bot.sendMessage(chatId, `Unknown error occurred`);
         }
-        throw e; // Re-throw the error to handle it in the main code
+        throw e;
     } finally {
         await connector.pauseConnection();
     }
-
-    // Option 2: Provide a deep link for the user to confirm the transaction in the wallet application
-    //let deeplink = '';
-    //const walletInfo = await getWalletInfo(connector.wallet!.device.appName);
-    //if (walletInfo) {
-    //    if ("universalLink" in walletInfo) { // kostyl
-    //        deeplink = walletInfo.universalLink;
-    //    }
-
-    //    if (deeplink) {
-    //       await bot.sendMessage(
-    //            chatId,
-    //            `Open ${walletInfo?.name || connector.wallet!.device.appName} and confirm transaction`,
-    //            {
-    //                reply_markup: {
-    //                    inline_keyboard: [
-    //                        [
-    //                            {
-    //                                text: 'Open Wallet',
-    //                                url: deeplink
-    //                            }
-    //                        ]
-    //                    ]
-    //                }
-    //           }
-    //        );
-    //    }
-    //}
 }
+
 
 export async function handleDisconnectCommand(msg: TelegramBot.Message): Promise<void> {
     const chatId = msg.chat.id;
-
     const connector = getConnector(chatId);
 
     await connector.restoreConnection();
@@ -131,13 +117,11 @@ export async function handleDisconnectCommand(msg: TelegramBot.Message): Promise
     }
 
     await connector.disconnect();
-
     await bot.sendMessage(chatId, 'Wallet has been disconnected');
 }
 
 export async function handleShowMyWalletCommand(msg: TelegramBot.Message): Promise<void> {
     const chatId = msg.chat.id;
-
     const connector = getConnector(chatId);
 
     await connector.restoreConnection();
@@ -158,4 +142,31 @@ export async function handleShowMyWalletCommand(msg: TelegramBot.Message): Promi
             connector.wallet!.account.chain === CHAIN.TESTNET
         )}`
     );
+}
+
+export async function handleAboutCommand(msg: TelegramBot.Message): Promise<void> {
+    const chatId = msg.chat.id;
+    await bot.sendMessage(chatId, 'Use /start first. If you are a Sender - please create an 📦Item. As soon as we will find a match - you will be updated. ' +
+        '\nAfter getting contacts - contact any Transporter you want' +
+        '\n\nIf you are a Transporter - just create a ✈️Trip and wait till Sender contact you. Collect the Item, ' +
+        'and deliver it. Scan QR to confirm and get your bonus'  +
+        '\n\nUse /connect to connect your TON wallet (requires Tonkeeper app). You will be able to make smart-contracts with Transporters (we take a 2% fee)' +
+        '\n\n\n\nThis is an alfa-version. We will add features soon. Stay tuned.' +
+        '\n\nAll rights reserved.\nx4lnq_bot v1.1a. 2024');
+}
+
+async function handleScanCommand(msg: TelegramBot.Message): Promise<void> {
+    const chatId = msg.chat.id;
+    await bot.sendMessage(chatId, "Scan a QR code", {
+        reply_markup: {
+            inline_keyboard: [
+                [
+                    {
+                        text: "Open Scanner",
+                        web_app: { url: "https://your-hosted-web-app-url.com" }
+                    },
+                ],
+            ],
+        },
+    });
 }
