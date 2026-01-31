@@ -1,0 +1,30 @@
+{
+  "lang": "ru",
+
+  "new_item_btn": "Новая посылка",
+  "new_trip_btn": "Новое путешествие",
+  "conf_delivery_btn": "Подтвердить доставку",
+  "remove_btn": "Удалить мои данные",
+  "open_link_btn": "Открыть ссылку",
+
+  "date_fld": "Дата: ",
+  "con_wallet_fld": "Подключенный кошелек: ",
+  "address_fld": "Ваш адрес: ",
+
+  "choose_lbl": "Выберите опцию: ",
+
+  "nowallet_msg": "Кошелек не подключен",
+  "tonkwallet_msg": "Tonkeeper-кошелек подключен!",
+  "trip_saved_msg": "Путешествие созранено:\n",
+  "sender_contact_msg": "Отправитель свяжется с вами в случае совпадения",
+  "contract with_msg": "Контракт с ",
+  "created_succ_msg": "создан успешно.\n",
+  "deliver_msg": "Доставьте Посылку чтобы получить оплату ",
+  "TON_msg": "TON\n",
+  "congrats_delivery_msg": "Поздравляем! Вы доставили посылку.\nСредства поступят на ваш счет очень скоро.",
+  "data_removed_msg": "Ваши данные удалены.",
+
+  "data_removed_err": "Ошибка удаления данных.",
+
+  "about_info": "Используйте команду /connect для подключения TON-кошелька (требуется приложение Tonkeeper).'\n\nИспользуйте команду /start чтобы создать Посылку или Путешествие. Как только мы найдем совпадения - мы пришлем вам уведомление в этот бот.\n\nTo start showing possible transporter contacts we will take a 2% fee first.'\nAfter start getting contacts - choose any transporter you want and make a contact.\n\n'If you are a transporter - just create a trip and wait till someone contact you. Collect the item, deliver it and get your bonus.\n\n'This is an alfa-version. Soon we will make the whole process on smart-contracts.\n\n'Also we collect some anonymous data for performance analysis.\n'Stay tuned.\n\n\n\n'x4lnq_bot v1.0a. All rights reserved."
+}

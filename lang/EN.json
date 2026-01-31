@@ -1,0 +1,31 @@
+{
+  "lang": "en",
+
+  "new_item_btn": "New item",
+  "new_trip_btn": "New trip",
+  "conf_delivery_btn": "Confirm delivery",
+  "remove_btn": "Remove my data",
+  "open_link_btn": "Open link",
+
+  "date_fld": "Date: ",
+  "con_wallet_fld": "Connected wallet: ",
+  "address_fld": "Your address: ",
+
+  "choose_lbl": "Choose an option: ",
+
+  "nowallet_msg": "No wallets connected",
+  "tonkwallet_msg": "Tonkeeper wallet connected!",
+  "trip_saved_msg": "Trip saved:\n",
+  "sender_contact_msg": "Sender will contact you in case of a match",
+  "contract with_msg": "Contract with ",
+  "created_succ_msg": "created successfully.\n",
+  "deliver_msg": "Deliver the item to get paid ",
+  "TON_msg": "TON\n",
+  "congrats_delivery_msg": "Congrats! You delivered the item.\nFunds will be transferred to your account very soon.",
+  "data_removed": "Your data has been removed.",
+
+  "data_removed_err": "Error REMOVING",
+
+
+  "about_info": "Use /connect command to connect your wallet (requires Tonkeeper app).'\n\nUse /start to create an item or a trip. As soon as we will find a match - you will get an update from this bot.\n\nTo start showing possible transporter contacts we will take a 2% fee first.'\nAfter start getting contacts - choose any transporter you want and make a contact.\n\n'If you are a transporter - just create a trip and wait till someone contact you. Collect the item, deliver it and get your bonus.\n\n'This is an alfa-version. Soon we will make the whole process on smart-contracts.\n\n'Also we collect some anonymous data for performance analysis.\n'Stay tuned.\n\n\n\n'x4lnq_bot v1.0a. All rights reserved."
+}
