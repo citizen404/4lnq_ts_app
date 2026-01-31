@@ -1,7 +1,8 @@
-# 📦 4LNQ: P2P Delivery Matcher Bot 
+# 📦 4LNQ: P2P Delivery Matcher Bot
 ### (prepared task for The Open Network Hackaton 2024 by dorahacks)
 
 A decentralized Telegram-based service connecting travelers and senders for small parcel delivery, secured by TON blockchain smart contracts.
+t.me/x4lnq_bot
 
 ## 🚀 The Problem
 Travelers and senders are currently scattered across thousands of chaotic Telegram chats. Finding a match is time-consuming, and transactions rely purely on "word of mouth," creating significant security risks for both parties.
@@ -22,7 +23,7 @@ Note: Currently, once balances are verified, the Smart Contract is manually depl
 Delivery & Payout: Upon meeting the Recipient, the Carrier scans the QR code. This triggers the smart contract to:
 Release funds from the Sender to the Carrier.
 Transfer a 2% service fee to the platform (4LNQ).
------------------------------------------
+
 # 💻 Tech Stack
 Backend: TypeScript
 Frontend: JavaScript (Telegram Mini App)
@@ -35,6 +36,7 @@ Future Feature: Cargo Insurance — funds will be locked on the Carrier's balanc
 Full Automation: Transitioning from operator-led deployment to fully autonomous contract instantiation.
 
 # 📺 Pitch Video
-Watch our Project Presentation on YouTube
+Watch our Project Presentation on YouTube youtu.be/uFLmphOx_0o
+
 -----------------------------------------
 ### Bridging borders, one parcel at a time.
