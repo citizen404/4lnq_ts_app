@@ -1,5 +1,7 @@
 # 📦 4LNQ: P2P Delivery Matcher Bot
 ### (prepared task for The Open Network Hackaton 2024 by dorahacks)
+pitch
+<video src="https://www.youtube.com/watch?v=uFLmphOx_0o" controls width="600"></video>
 
 A decentralized Telegram-based service connecting travelers and senders for small parcel delivery, secured by TON blockchain smart contracts.
 t.me/x4lnq_bot
